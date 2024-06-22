@@ -16,7 +16,7 @@ function SignUp() {
   
   const [form] = Form.useForm();
   const { token } = useToken();
-  const [error, seterror] = useState('')
+  const [error, setError] = useState('')
 
   const screens = useBreakpoint();
   const dispatch = useDispatch();
@@ -37,7 +37,7 @@ function SignUp() {
         role: "User", 
       };   
       
-      !isUserExist(NewUser) ? dispatch(AddUser(NewUser)) : seterror('User already exist!')
+      !isUserExist(NewUser) ? dispatch(AddUser(NewUser)) : setError('User already exist!')
       form.resetFields(); 
     } catch (errorInfo) {
     }

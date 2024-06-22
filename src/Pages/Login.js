@@ -2,9 +2,10 @@ import React, { useState } from "react";
 
 import { Button, Checkbox, Form, Grid, Input, theme, Typography } from "antd";
 
-import { LockOutlined, MailOutlined , UserOutlined} from "@ant-design/icons";
-import { useDispatch, useSelector } from 'react-redux';
+import { LockOutlined, MailOutlined} from "@ant-design/icons";
+import { useSelector } from 'react-redux';
 import { useNavigate , Link} from "react-router-dom";
+import { LoginStyles } from "../styles";
 
 const { useToken } = theme;
 const { useBreakpoint } = Grid;
@@ -15,6 +16,7 @@ const { Text, Title } = Typography;
   const [form] = Form.useForm();
   const { token } = useToken();
   const screens = useBreakpoint();
+
   const Users = useSelector(state=> state.Users.UsersArray)
   var navigate = useNavigate();
   const [error, seterror] = useState('')
@@ -31,52 +33,18 @@ const { Text, Title } = Typography;
   }
   const onFinish = async (values) => {
     try {
-      await form.validateFields(); // Trigger form validation
+      await form.validateFields(); 
       const currUser ={
         email: values.email,
         password: values.password
       }
-
-      console.log(ValidateUser(currUser))
       ValidateUser(currUser)? navigate('/Home') : seterror('Invalid email or password')
-     
 
     } catch (errorInfo) {
     }
   };
 
-
-  const styles = {
-    container: {
-      margin: "0 auto",
-      padding: screens.md ? `${token.paddingXL}px` : `${token.sizeXXL}px ${token.padding}px`,
-      width: "380px"
-    },
-    footer: {
-      marginTop: token.marginLG,
-      textAlign: "center",
-      width: "100%"
-    },
-    forgotPassword: {
-      float: "right"
-    },
-    header: {
-      marginBottom: token.marginXL
-    },
-    section: {
-      alignItems: "center",
-      backgroundColor: token.colorBgContainer,
-      display: "flex",
-      height: screens.sm ? "100vh" : "auto",
-      padding: screens.md ? `${token.sizeXXL}px 0px` : "0px"
-    },
-    text: {
-      color: token.colorTextSecondary
-    },
-    title: {
-      fontSize: screens.md ? token.fontSizeHeading2 : token.fontSizeHeading3
-    }
-  };
+  const styles = LoginStyles(token, screens);
 
   return (
     <section style={styles.section}>
@@ -154,7 +122,7 @@ const { Text, Title } = Typography;
             <Form.Item name="remember" valuePropName="checked" noStyle>
               <Checkbox>Remember me</Checkbox>
             </Form.Item>
-            <a style={styles.forgotPassword} href="">
+            <a style={LoginStyles.forgotPassword} href="">
               Forgot password?
             </a>
           </Form.Item>
@@ -163,8 +131,8 @@ const { Text, Title } = Typography;
               Log in
             </Button>
             {error && <Text type="danger">{error}</Text>}
-            <div style={styles.footer}>
-              <Text style={styles.text}>Don't have an account?</Text>{" "}
+            <div style={LoginStyles.footer}>
+              <Text style={LoginStyles.text}>Don't have an account?</Text>{" "}
               
               <Link to="/SignUp">Sign Up</Link>
             </div>

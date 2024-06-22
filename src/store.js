@@ -1,5 +1,4 @@
-import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
-import { useEffect } from "react";
+import { configureStore} from "@reduxjs/toolkit";
 import quoteReducer from './Features/QuoteSlice' 
 import tagReducer from './Features/TagSlice' 
 import userReducer from './Features/UserSlice' 

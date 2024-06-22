@@ -10,27 +10,22 @@ const { TextArea } = Input;
 
 const MAX_COUNT = 3;
 const nanoID = nanoid();
-// const options = ['inspirational', 'motivating', 'captivating', 'sports', 'peace', 'Fictional'];
+
 const options = AvailableTags;
 const AddQuoteComponent = (onHandleClose) => {
    
   const [form] = Form.useForm();
   const dispatch = useDispatch();
-  const [Tag, setTag] = useState([])
+  const [tag, setTag] = useState([])
 
   const handleChange = (value) => {
     setTag([...value]) 
   };
-
-  useEffect(() => {
-  console.log(Tag)
-  
-  }, [Tag])
   
   const onFinish = async (values) => {
     try {
-      await form.validateFields(); // Trigger form validation
-      const { Quote } = values; // Extract validated quote
+      await form.validateFields(); 
+      const { Quote } = values; 
      
       const NewQuote = {
         id: nanoID,
@@ -42,13 +37,11 @@ const AddQuoteComponent = (onHandleClose) => {
 
       const QuoteTags = {
         id: nanoid(),
-        title: Tag,
+        title: tag,
         quoteId: nanoID
       };
       dispatch(AddQuote(NewQuote)); 
       dispatch(AddTag(QuoteTags));
-
-      console.log(QuoteTags)
       form.resetFields(); 
       onHandleClose()
     } catch (errorInfo) {

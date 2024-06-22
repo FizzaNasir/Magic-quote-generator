@@ -12,7 +12,6 @@ TagsArray: [
 ]
 }
 const TagSlice = createSlice({
-    //state here is 
     name: 'Tags',
     initialState,
     reducers: {
@@ -26,9 +25,6 @@ const TagSlice = createSlice({
               });
             }
         },
-        DeleteTag: (state, action) => {
-         
-      },
     }
 })
 

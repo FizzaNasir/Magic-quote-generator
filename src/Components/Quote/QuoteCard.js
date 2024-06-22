@@ -9,37 +9,26 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useEffect , useState} from 'react';
 import { AddLike, RemoveLike } from '../../Features/QuoteLikeSlice';
 import { nanoid } from '@reduxjs/toolkit';
-import {Typography, Fade, Modal, Box, Backdrop, Button, Chip, List,
+import {Typography,Chip, List,
    ListItemButton, ListItemIcon, ListItemText, ListItem, Card, CardHeader, 
    CardContent,CardActions, Avatar, IconButton, Popover, Stack} from '@mui/material';
-import SendIcon from '@mui/icons-material/Send';
 import AddComment from '../Comments/AddComment';
-import ModalComponent from '../HomePage/ModalComponent';
+import ModalComponent from '../Home/ModalComponent';
+import ListItemComponent from '../ListItemComponent';
 const LOGGED_IN_USERID = localStorage.getItem('loginUserId')
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 400,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 4,
-};
 
 const QuoteCard = ({id, quote, author, dateCreated, timeCreated, tags}) => {
    
+
     const [anchorEl, setAnchorEl] = React.useState(null);
-    const [Like, setLike] = React.useState(false);
-    const [DisLike, setDisLike] = React.useState(false);
-    const [isLikeClick, setisLikeClick] = React.useState(false);
+    const [like, setLike] = React.useState(false);
+    const [disLike, setDisLike] = React.useState(false);
+    const [isLikeClick, setIsLikeClick] = React.useState(false);
     const [likesCount, setLikesCount] = useState(0);
 
-    //handling comment modal
-    const [openCommentModal, setopenCommentModal] = React.useState(false);
-    const handleCommentModalOpen = () => setopenCommentModal(true);
-    const handleCommentModalClose = () => setopenCommentModal(false);
+    const [openCommentModal, setOpenCommentModal] = React.useState(false);
+    const handleCommentModalOpen = () => setOpenCommentModal(true);
+    const handleCommentModalClose = () => setOpenCommentModal(false);
     
     const QuoteLikes = useSelector((state)=>state.QuoteLikes.LikesArray)
 
@@ -55,7 +44,7 @@ const QuoteCard = ({id, quote, author, dateCreated, timeCreated, tags}) => {
     };
    
     const handleLike = () =>{
-      setisLikeClick(true)
+      setIsLikeClick(true)
       setLike(prevState=> !prevState)
     }
 
@@ -74,25 +63,36 @@ const QuoteCard = ({id, quote, author, dateCreated, timeCreated, tags}) => {
     }, [QuoteLikes, id]);
 
     useEffect(() => {
-      if(Like){
+      if(like){
         const isLikeExist = QuoteLikes.find(el => (el.userId === LOGGED_IN_USERID && el.quoteId === id))
         if(!isLikeExist) {
         dispatch(AddLike({id: nanoid(), userId: LOGGED_IN_USERID, quoteId: id}))}
      
       }
-      if(isLikeClick && !Like){
+      if(isLikeClick && !like){
         dispatch(RemoveLike({userId: LOGGED_IN_USERID, quoteId: id}))
       }
 
       return ()=>{
-        setisLikeClick(false)
+        setIsLikeClick(false)
       }
-    }, [Like])
+    }, [like])
     
     function onDeleteClickHandler(id){
-      console.log(id)
       dispatch(DeleteQuote(id))
     }
+
+    const listItemData = [
+      {
+        onClick: null,
+        primary: "Report"
+      },
+      {
+        onClick: onDeleteClickHandler(id),
+        primary: "Delete"
+      }
+    ];
+  
 return (
 <>
    <ModalComponent onHandleClose={handleCommentModalClose} open={openCommentModal} content= {<AddComment quoteId={id} onModalClose={handleCommentModalClose}/>}/>
@@ -107,7 +107,15 @@ return (
         }}
       >
         <List>
-       <ListItem disablePadding 
+          {
+            listItemData.map(item => (
+              <ListItemComponent
+                  onClick={item.onClick}   
+                  primary={item.primary}
+              />
+            ))
+          }
+       {/* <ListItem disablePadding 
        >
          <ListItemButton>
            <ListItemIcon>
@@ -124,7 +132,7 @@ return (
             onClick={()=>onDeleteClickHandler(id)}
             primary='Delete' />
          </ListItemButton>
-       </ListItem>
+       </ListItem> */}
        </List>
       </Popover>
 
@@ -151,13 +159,13 @@ return (
           </CardContent>
          <CardActions disableSpacing>
 
-            <IconButton aria-label="Likes" style={{color: Like && 'blue'}} onClick={handleLike}>
+            <IconButton aria-label="Likes" style={{color: like && 'blue'}} onClick={handleLike}>
              <ThumbUpIcon /> 
              <p style={{fontSize: 20, padding: 3}}>|</p> 
              <p style={{fontSize: 17}}> {likesCount} </p> 
             </IconButton>
 
-            <IconButton aria-label="Dislikes"  style={{color: DisLike && 'red'}} onClick={handleDisLike}>
+            <IconButton aria-label="Dislikes"  style={{color: disLike && 'red'}} onClick={handleDisLike}>
             <ThumbDownIcon />
             <p style={{fontSize: 20, padding: 3}}> |</p> 
             <p style={{fontSize: 17}}>4</p> 

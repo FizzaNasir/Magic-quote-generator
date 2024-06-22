@@ -25,7 +25,6 @@ const initialState = {
     }
 ]}
 const QuoteSlice = createSlice({
-    //state here is 
     name: 'Quotes',
     initialState,
     reducers: {

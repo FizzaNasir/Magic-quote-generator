@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Form, Input, Select, Space} from 'antd';
+import { Button, Form, Input} from 'antd';
 import { nanoid } from '@reduxjs/toolkit'
 import { useDispatch, useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
@@ -12,19 +12,16 @@ const { TextArea } = Input;
 
 const LOGGED_IN_USERID= localStorage.getItem('loginUserId')
 
-// const options = AvailableTags;
 const AddComment = ({quoteId, onModalClose}) => {
    
   const [form] = Form.useForm();
   const dispatch = useDispatch();
   const AllComments = useSelector(state=> state.Comments.CommentsArray)
-  const [filteredComments, setfilteredComments] = useState([])
-//   const filteredComments = Comments.filter(el=> el.quoteId === quoteId)
+  const [filteredComments, setFilteredComments] = useState([])
 
   const onFinish = async (values) => {
   const {Comment} = values
   dispatch(Add_Comment({id: nanoid(), comment: Comment, userId: LOGGED_IN_USERID, quoteId: quoteId}))
-
   onModalClose();
   };
 
@@ -34,7 +31,7 @@ const AddComment = ({quoteId, onModalClose}) => {
 
   useEffect(() => {
     const Comments = AllComments.filter(el=> el.quoteId === quoteId)
-    setfilteredComments(Comments)
+    setFilteredComments(Comments)
   }, [AllComments])
   
   return (

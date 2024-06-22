@@ -4,7 +4,6 @@ const initialState =
 { LikesArray : [] }
 
 const QuoteLikeSlice = createSlice({
-    //state here is 
     name: 'QuoteLikes',
     initialState,
     reducers: {

@@ -4,7 +4,6 @@ const initialState =
 { CommentsArray : [] }
 
 const CommentsSlice = createSlice({
-    //state here is 
     name: 'Comments',
     initialState,
     reducers: {
